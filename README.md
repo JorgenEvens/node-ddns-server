@@ -1,4 +1,4 @@
 node-ddns-server
 ================
 
-A DNS server that allows you tho host your own dyndns domain.
+A DNS server that allows you to host your own dyndns domain.
