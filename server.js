@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var dns = require( 'node-dns' ),
+
 	server = dns.createServer(),
 
 	my_domain = 'dyn.evens.eu',
