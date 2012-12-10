@@ -12,25 +12,25 @@ var dns = require( 'node-dns' ),
 	my_domain = 'dyn.evens.eu',
 
 	records = RecordStore.open( 'mysql-store', 'mysql', 'mysql://dev:dev@localhost/dyndns' );
-	records.addRecord( 'dyn.evens.eu', 'status', 'A', '159.253.3.124' );
+	records.addRecord( 'status.dyn.evens.eu', 'A', new dns.A({
+		name: 'status',
+		address: '159.253.3.124',
+		ttl: 300
+	}) );
 
 server.on( 'request', function( request, response ) {
 	var question = request.question[0],
+	
 		qtype = dns.consts.QTYPE_TO_NAME[question.type],
-		name = question.name.replace( '.' + my_domain, '' );
+		name = question.name;
 
-	records.findRecord( my_domain, name, qtype, function( record ){
+	records.findRecord( name, qtype, function( record ){
 		if( !record ) {
 			response.rcode = 3;
 			return response.send();
 		}
 
-		response.answer.push( dns[record.type]({
-			name: name + '.' + my_domain,
-			address: record.data.toString(),
-			data: this.address,
-			ttl: 300
-		}));
+		response.answer.push( dns[ record.type ]( record.data ) );
 
 		response.send();
 	} );
