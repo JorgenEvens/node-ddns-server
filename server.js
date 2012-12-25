@@ -3,36 +3,46 @@
 var RecordStore = require('./lib/RecordStore.js'),
 	DNSServer = require('./lib/DNS.js'),
 	APIServer = require('./lib/API.js'),
+	config = require('./config.js'),
 	fs = require('fs'),
 
-	records = RecordStore.open( 'mysql-store', 'mysql', 'mysql://dev:dev@localhost/dyndns' ),
+	records = RecordStore.open(
+		config.recordstore.name,
+		config.recordstore.type,
+		config.recordstore.connection_string ),
 
-	dns = DNSServer( records ),
+	dns = DNSServer( records, config.dns.port ),
 	api = null,
 
+	ssl = false;
+
+if( config.api.ssl ) {
 	ssl = {
 		key: null,
 		cert: null
-	},
+	}
 
-	startAPI = function() {
+	function startAPI() {
 		if( ssl.key  && ssl.cert ) {
-			api = APIServer( records, 5353, ssl );
+			api = APIServer( records, config.api.port, ssl );
 		}
 	};
 
-fs.readFile( 'ssl/key.pem', function( err, data ) {
-	if( err ) { throw err; }
+	fs.readFile( config.api.ssl.key, function( err, data ) {
+		if( err ) { throw err; }
 
-	ssl.key = data;
-	startAPI();
-});
+		ssl.key = data;
+		startAPI();
+	});
 
-fs.readFile( 'ssl/cert.pem', function( err, data ) {
-	if( err ) { throw err; }
+	fs.readFile( config.api.ssl.cert, function( err, data ) {
+		if( err ) { throw err; }
 
-	ssl.cert = data;
-	startAPI();
-});
+		ssl.cert = data;
+		startAPI();
+	});
+} else {
+	api = APIServer( records, config.api.port );
+}
 
 // TODO: Authentication ( per record key? )
