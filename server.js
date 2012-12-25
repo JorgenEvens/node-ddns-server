@@ -1,31 +1,38 @@
 #!/usr/bin/env node
 
-var dns = require( 'node-dns' ),
-	RecordStore = require('./lib/RecordStore.js'),
+var RecordStore = require('./lib/RecordStore.js'),
+	DNSServer = require('./lib/DNS.js'),
+	APIServer = require('./lib/API.js'),
+	fs = require('fs'),
 
-	server = dns.createServer(),
-	records = RecordStore.open( 'mysql-store', 'mysql', 'mysql://dev:dev@localhost/dyndns' );
+	records = RecordStore.open( 'mysql-store', 'mysql', 'mysql://dev:dev@localhost/dyndns' ),
 
-server.on( 'request', function( request, response ) {
-	var question = request.question[0],
-	
-		qtype = dns.consts.QTYPE_TO_NAME[question.type],
-		name = question.name;
+	dns = DNSServer( records ),
+	api = null,
 
-	records.findRecord( name, qtype, function( record ){
-		if( !record ) {
-			response.rcode = 3;
-			return response.send();
+	ssl = {
+		key: null,
+		cert: null
+	},
+
+	startAPI = function() {
+		if( ssl.key  && ssl.cert ) {
+			api = APIServer( records, 5353, ssl );
 		}
+	};
 
-		response.answer.push( dns[ record.type ]( record.data ) );
+fs.readFile( 'ssl/key.pem', function( err, data ) {
+	if( err ) { throw err; }
 
-		response.send();
-	} );
-	
-} );
+	ssl.key = data;
+	startAPI();
+});
 
-server.serve( 1053 );
+fs.readFile( 'ssl/cert.pem', function( err, data ) {
+	if( err ) { throw err; }
 
-// TODO: Write a REST API to add / delete
+	ssl.cert = data;
+	startAPI();
+});
+
 // TODO: Authentication ( per record key? )
