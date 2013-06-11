@@ -5,8 +5,7 @@ CREATE TABLE records (
 	data			BLOB 			NOT NULL,
 
 	PRIMARY KEY( id ),
-	UNIQUE KEY( domain, name, type ),
-	UNIQUE KEY( update_has )
+	UNIQUE KEY( name, type )
 );
 
 CREATE TABLE users (
