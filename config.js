@@ -8,10 +8,20 @@ var config = {
 		ssl: {
 			key: 'ssl/key.pem',
 			cert: 'ssl/cert.pem'
-		}
+		},
 
 		/* NO SSL
 		ssl: false
+		*/
+
+		// OAuth2 protection of the API, set to false to disable
+		oauth: {
+			crypt_key: 'very-very-secret-key',
+			sign_key: 'also-a-very-very-secret-key'
+		}
+
+		/* NO AUTH
+		oauth: false
 		*/
 	},
 

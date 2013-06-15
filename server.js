@@ -2,7 +2,7 @@
 
 var RecordStore = require('./lib/RecordStore.js'),
 	DNSServer = require('./lib/DNS.js'),
-	APIServer = require('./lib/API.js'),
+	API = require('./lib/API.js'),
 	config = require('./config.js'),
 	fs = require('fs'),
 
@@ -13,36 +13,31 @@ var RecordStore = require('./lib/RecordStore.js'),
 
 	dns = DNSServer( records, config.dns.port ),
 	api = null,
+	server = null,
 
-	ssl = false;
+	ssl = false,
+
+	startAPI = function() {
+		api = new API({
+			'store': records,
+			oauth: config.api.oauth
+		});
+
+		server
+			.on('request', api)
+			.listen( config.api.port || ( ssl ? 443 : 80 ) );
+	}
 
 if( config.api.ssl ) {
 	ssl = {
-		key: null,
-		cert: null
-	}
-
-	function startAPI() {
-		if( ssl.key  && ssl.cert ) {
-			api = APIServer( records, config.api.port, ssl );
-		}
+		key: fs.readFileSync(config.api.ssl.key),
+		cert: fs.readFileSync(config.api.ssl.cert)
 	};
 
-	fs.readFile( config.api.ssl.key, function( err, data ) {
-		if( err ) { throw err; }
-
-		ssl.key = data;
-		startAPI();
-	});
-
-	fs.readFile( config.api.ssl.cert, function( err, data ) {
-		if( err ) { throw err; }
-
-		ssl.cert = data;
-		startAPI();
-	});
+	server = require('https').createServer( ssl );
 } else {
-	api = APIServer( records, config.api.port );
+	ssl = false;
+	server = require('http').createServer();
 }
 
-// TODO: Authentication ( per record key? )
+startAPI();
