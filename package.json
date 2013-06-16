@@ -1,6 +1,6 @@
 {
 	"name": "ddns-server",
-	"version": "0.1",
+	"version": "0.1.0",
 	"description": "Allows you to host your own DynDNS domain",
 	"homepage": "https://github.com/JorgenEvens/node-ddns-server",
 	"author": {
@@ -10,8 +10,8 @@
 	"main": "server",
 	"dependencies": {
 		"connect": ">=2.7.0",
-		"mysql": ">=2.0.0",
-		"node-dns": "https://github.com/tjfontaine/node-dns",
+		"mysql": ">=2.0.0-alpha8",
+		"node-dns": "git://github.com/tjfontaine/node-dns.git#0894a46ce3bd099a64622bf3025fe99a09d3f6cd",
 		"oauth2-provider": ">=1.3.0"
 	},
 	"devDependencies": {
