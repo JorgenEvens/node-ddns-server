@@ -1,18 +1,11 @@
-node-ddns-server
-================
+# node-ddns-server
 
-A DNS server that allows you to host your own dyndns domain.
+A DNS server that allows you to host your own dyndns domain. And has an RESTful API secured using OAuth2.
 
-### Required modules
-- [mysql][0] ( `npm install mysql` )
-- [connect][1] ( `npm install connect` )
-- [oauth2-provider][2] ( `npm install oauth2-provider` )
-- [node-dns][3] ( `git submodule update --init` )
+## Required modules
+Before anything will run you have to retrieve the required modules.
 
-[0]: https://npmjs.org/package/mysql
-[1]: https://npmjs.org/package/connect
-[2]: https://npmjs.org/package/oauth2-provider
-[3]: https://github.com/tjfontaine/node-dns
+`npm install -d`
 
 ### Configuration
 Configuration can be changed in config.js, each option is explained inline although most are self-explanatory.
