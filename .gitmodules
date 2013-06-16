@@ -1,3 +1,0 @@
-[submodule "node-dns"]
-	path = "node_modules/node-dns"
-	url = git://github.com/tjfontaine/node-dns.git
