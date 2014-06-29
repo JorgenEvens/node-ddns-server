@@ -1,0 +1,32 @@
+{
+  "name": "node-ddns-server",
+  "version": "0.1.0",
+  "description": "A DNS server that allows you to host your own dyndns domain.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JorgenEvens/node-ddns-server"
+  },
+  "keywords": [
+    "dyndns",
+    "noip",
+    "dns"
+  ],
+  "author": "Jorgen Evens <jorgen@evens.eu>",
+  "license": "BSD-3",
+  "bugs": {
+    "url": "https://github.com/JorgenEvens/node-ddns-server/issues"
+  },
+  "homepage": "https://github.com/JorgenEvens/node-ddns-server",
+  "dependencies": {
+    "body-parser": "^1.4.3",
+    "express": "^4.4.0",
+    "mysql": "^2.3.2",
+    "native-dns": "git://github.com/tjfontaine/node-dns.git#0894a46ce3bd099a64622bf3025fe99a09d3f6cd",
+    "node-oauth2-server": "^2.1.1",
+    "sequelize": "^1.7.5"
+  }
+}

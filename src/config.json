@@ -1,0 +1,13 @@
+{
+	"dns": {
+		"port": 53
+	},
+
+	"api": {
+		"port": 3000
+	},
+
+	"db": {
+		"connectionstring": "mysql://dev:dev@localhost/node-ddns"
+	}
+}
