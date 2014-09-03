@@ -64,9 +64,11 @@ var models = require('../model'),
 
 module.exports = {
 	attach: function( express, done ) {
+		var oa = express.oauth;
+
 		express.get( '/:domain/:type', record.retrieve );
-		express.put( '/:domain/:type', record.update );
-		express.delete( '/:domain/:type', record.delete );
+		express.put( '/:domain/:type', oa.authorise(), record.update );
+		express.delete( '/:domain/:type', oa.authorise(), record.delete );
 		done();
 	}
 }
