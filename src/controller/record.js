@@ -16,7 +16,7 @@ var models = require('../model'),
 				while( count-- )
 					result.push(JSON.parse( records[count].data ));
 
-				resp.end( JSON.stringify( result ) );
+				resp.success({ records: result });
 			})
 		},
 
