@@ -2,6 +2,10 @@
 
 A DNS server that allows you to host your own dyndns domain. With a RESTful OAuth2 API.
 
+# Client implementation
+
+A client written in Go is available at [https://github.com/JorgenEvens/ddns-client](https://github.com/JorgenEvens/ddns-client)
+
 # Installing
 
 ```
