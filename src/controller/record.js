@@ -44,17 +44,31 @@ var models = require('../model'),
 
 			record = new dns[type](record);
 
-			models.Record.findOrCreate(
-				{ name: domain, type: type },
-				{ data: JSON.stringify( record ) } )
-				.success(function( record, created ) {
-					if( !created ) {
-						record.data = JSON.stringify(record);
-						record.save();
+			models.Record.findOrCreate({
+				where: { name: domain, type: type },
+				defaults: { data: JSON.stringify( record ) }
+			})
+			.success(function( r, created ) {
+				if( created ) {
+					models.User.find(req.user.id).success(function(user){
+						r.addUser( user );
+						resp.success();
+					});
+					return;
+				}
+				
+				r.hasUser(req.user.id).success(function(has_user){
+					console.log(has_user);
+					if( !has_user ) {
+						return resp.error('Not authorized!');
 					}
 
-					resp.end( JSON.stringify({ success: true }) );
+					r.data = JSON.stringify(record);
+					r.save();
+				
+					resp.success();
 				});
+			});
 		},
 
 		delete: function( req, resp ) {
