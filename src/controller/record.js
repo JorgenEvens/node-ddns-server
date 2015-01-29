@@ -72,7 +72,53 @@ var models = require('../model'),
 		},
 
 		delete: function( req, resp ) {
+			var domain = req.param('domain'),
+				type = req.param('type').toUpperCase(),
+				has_target = (typeof req.body.data != 'undefined'),
+				target = has_target ? req.body.data : req.connection.remoteAddress,
+				filter = {
+					name: domain,
+					type: dns.consts.NAME_TO_QTYPE[type]
+				};
 
+			models.Record.findAll({
+				where: {
+					name: domain,
+					type: type
+				},
+				include: [
+					{ model: models.User, where: { id: req.user.id } }
+				]
+			})
+			.success(function( records ) {
+				var deleted = [],
+
+					doDelete = function() {
+						if( records.length == 0 ) {
+							return resp.success({ deleted: deleted });
+						}
+
+						var i = records.shift(),
+							d = JSON.parse(i.data);
+
+						if( ( !target ) || // Delete all records for domain & type
+							( type == 'A' && d.address == target ) || // Delete only matching types
+							( type == 'MX' && d.exchange == target && 
+								d.priority == ( req.body.priority || d.priority ) ) ||
+							( d.data == target ) ) {
+
+							deleted.push(d);
+							i.destroy();
+						}
+
+						doDelete();
+					};
+
+				if( records.length > 0 )
+					return doDelete();
+
+				resp.error('No records found.');
+			});
 		}
 	};
 
