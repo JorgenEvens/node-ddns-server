@@ -28,6 +28,6 @@
     "native-dns": "git://github.com/tjfontaine/node-dns.git#0894a46ce3bd099a64622bf3025fe99a09d3f6cd",
     "node-oauth2-server": "^2.1.1",
     "oauth2-server": "^2.2.2",
-    "sequelize": "^1.7.5"
+    "sequelize": "^2.0.0-rc8"
   }
 }
