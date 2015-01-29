@@ -33,12 +33,13 @@ var models = require('../model'),
 		},
 
 		saveAccessToken: function(accessToken, clientId, expires, user, callback) {
-			models.AccessToken.findOrCreate(
-				{ accessToken: accessToken, userId: user.id },
-				{ data: { accessToken: accessToken, userId: user.id } } )
-				.success( function( record, created ) {
-					callback();
-				})
+			models.AccessToken.findOrCreate({
+				where: { accessToken: accessToken, userId: user.id },
+				defaults: { data: { accessToken: accessToken, userId: user.id } }
+			})
+			.success( function( record, created ) {
+				callback();
+			})
 		},
 
 		getUser: function(username, password, callback) {
