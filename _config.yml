@@ -1,1 +1,4 @@
 theme: jekyll-theme-cayman
+title: Self-hosted DDNS server
+description: A DNS server that allows you to host your own dyndns domain.
+google_analytics: UA-25703748-6
